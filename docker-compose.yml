@@ -1,0 +1,8 @@
+web:
+    container_name: pynginx
+    image: doberbeatz/nginxgunicorn
+    ports:
+    - "8080:80"
+    volumes:
+    - .:/home/www/microblog
+    command: bash -c "service nginx start && /home/www/microblog/run.py"
