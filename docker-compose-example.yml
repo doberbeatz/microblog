@@ -5,4 +5,5 @@ web:
     - "8080:80"
     volumes:
     - .:/home/www/microblog
+    restart: always
     command: bash -c "service nginx start && /home/www/microblog/run.py"
