@@ -1,4 +1,8 @@
 *.pyc
+__pycache__/
 ._*
 .idea/
 docker-compose.yml
+
+app.db
+/db_repository/versions/
