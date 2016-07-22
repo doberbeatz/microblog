@@ -6,4 +6,4 @@ web:
     volumes:
     - .:/home/www/microblog
     restart: always
-    command: bash -c "service nginx start && /home/www/microblog/run.py"
+    command: bash -c "service nginx start && cd /home/www/microblog && source ./flask/bin/activate && ./run.py"
