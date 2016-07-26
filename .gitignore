@@ -1,8 +1,13 @@
+# Mac OS
+.DS_Store
+
+# Python
 *.pyc
 __pycache__/
 ._*
 .idea/
 docker-compose.yml
+tmp/*
 
 app.db
 /db_repository/versions/
