@@ -41,6 +41,7 @@ def login():
                            form=form,
                            providers=app.config['OPENID_PROVIDERS'])
 
+
 @app.route('/logout')
 def logout():
     logout_user()
@@ -48,13 +49,13 @@ def logout():
 
 
 @lm.user_loader
-def load_user(id):
-    return User.query.get(int(id))
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 @oid.after_login
 def after_login(resp):
-    resp.email = 'doberbeatz@gmail.com' #TODO: fix it soon
+    resp.email = 'doberbeatz@gmail.com'  # TODO: fix it soon
     if resp.email is None or resp.email == '':
         flash('Invalid login. Please try again.')
         return redirect(url_for('login'))
@@ -70,11 +71,10 @@ def after_login(resp):
     if 'remember_me' in session:
         remember_me = session['remember_me']
         session.pop('remember_me', None)
-    login_user(user, remember = remember_me)
+    login_user(user, remember=remember_me)
     return redirect(request.args.get('next') or url_for('index'))
 
 
 @app.before_request
 def before_request():
     g.user = current_user
-
