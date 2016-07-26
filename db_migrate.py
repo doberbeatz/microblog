@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!flaskenv/bin/python
 
 import imp
 from migrate.versioning import api

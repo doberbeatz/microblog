@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Registration</h1>
+    <form action="{{ url_for('register') }}" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {% for error in form.errors %}
+                <span style="color:red">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            Username: {{ form.username(size=40) }}<br>
+            Email: {{ form.email(size=40) }}<br>
+            Password: {{ form.password(size=40) }}<br>
+            Password Confirm: {{ form.password_confirm(size=40) }}<br>
+        </p>
+        <p>
+            <input type="submit" value="Register">
+            <a href="{{ url_for('login') }}">Login</a>
+        </p>
+    </form>
+{% endblock %}
