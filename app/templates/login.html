@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "layout/base.html" %}
 
 {% block content %}
     <h1>Sign In</h1>
@@ -10,7 +10,7 @@
             {% endfor %}<br>
         </p>
         <p>
-            Login: {{ form.email(size=40) }}<br>
+            Email: {{ form.email(size=40) }}<br>
             Password: {{ form.password(size=40) }}<br>
         </p>
         <p>{{ form.remember_me }} Remember Me</p>

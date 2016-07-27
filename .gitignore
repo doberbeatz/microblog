@@ -9,5 +9,5 @@ __pycache__/
 docker-compose.yml
 tmp/*
 
-app.db
+/app.db
 /db_repository/versions/
