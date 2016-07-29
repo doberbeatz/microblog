@@ -8,5 +8,8 @@ SQLALCHEMY_TRACK_MODIFICATIONS = True
 CSRF_ENABLED = True
 SECRET_KEY = 'secret_key'
 
-# pagination
+# Pagination
 POSTS_PER_PAGE = 5
+
+# Search
+WHOOS_BASE = os.path.join(basedir, 'search.db')

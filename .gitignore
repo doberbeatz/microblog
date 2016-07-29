@@ -8,6 +8,7 @@ __pycache__/
 .idea/
 docker-compose.yml
 tmp/*
+flaskenv/
 
 /app.db
 /db_repository/versions/
