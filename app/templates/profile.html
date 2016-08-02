@@ -1,0 +1,38 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+    <div class="col-sm-3">
+        <div class="thumbnail">
+            <img src="{{ user.avatar(300) }}">
+            <div class="caption">
+                <h3>{{ user.username }}</h3>
+                {% if user.about_me %}
+                    <p>{{ user.about_me }}</p>
+                {% endif %}
+                {% if user.last_seen %}
+                    <p>Last seen on: {{ momentjs(user.last_seen).calendar() }}</p>
+                {% endif %}
+                {% if user.id == g.user.id %}
+                    <a href="{{ url_for('profile_edit') }}"
+                          class="btn btn-primary"
+                          role="button">Edit</a>
+                {% elif not g.user.is_following(user) %}
+                    <a href="{{ url_for('follow', username=user.username) }}"
+                       class="btn btn-default"
+                       role="button">Follow</a>
+                {% else %}
+                    <a href="{{ url_for('unfollow', username=user.username) }}"
+                       class="btn btn-success"
+                       role="button">Unfollow</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        {% for post in posts %}
+            {% include 'post.html' %}
+        {% else %}
+            <h4>{{ user.username }} hasn't published anything yet</h4>
+        {% endfor %}
+    </div>
+{% endblock %}

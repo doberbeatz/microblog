@@ -1,3 +1,4 @@
 #!flaskenv/bin/python
 from app import app
-app.run(debug=True)
+import os
+app.run(debug=bool(os.environ.get('DEBUG')))

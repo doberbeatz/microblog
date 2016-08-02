@@ -7,11 +7,11 @@ from datetime import datetime
 from app import app, db, lm
 from .forms import LoginForm, RegisterForm, EditForm, PostForm
 from .models import User, Post
+from .emails import follower_notification
 from config import POSTS_PER_PAGE
 
 
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
     """
@@ -26,7 +26,7 @@ def index():
         post = Post(body=form.post.data, timestamp=datetime.utcnow(), author=user)
         db.session.add(post)
         db.session.commit()
-        flash('Your post is now live!')
+        flash('Your post is now live!', 'success')
         return redirect(url_for('index'))
     posts = user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
     return render_template('index.html',
@@ -48,7 +48,7 @@ def login():
         session['remember_me'] = form.remember_me.data
         user = User.query.filter_by(email=form.email.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid email or password. Try again')
+            flash('Invalid email or password. Try again', 'danger')
             return redirect(url_for('login'))
         login_user(user)
         return redirect(url_for('index'))
@@ -82,11 +82,11 @@ def register():
             # Make the user follow himself
             db.session.add(user.follow(user))
             db.session.commit()
-            flash('Thanks for registering')
+            flash('Thanks for registering', 'success')
             login_user(user)
             return redirect(url_for('index'))
         else:
-            flash('User with same data is exists')
+            flash('User with same data is exists', 'danger')
     return render_template('register.html',
                            title='Sign In',
                            form=form)
@@ -104,9 +104,9 @@ def profile(username):
         username = g.user.username
     user = User.query.filter_by(username=username).first()
     if user is None:
-        flash('User %s is not found.' % username)
+        flash('User %s is not found.' % username, 'danger')
         redirect(url_for('index'))
-    return render_template('user.html',
+    return render_template('profile.html',
                            user=user,
                            posts=user.posts)
 
@@ -118,13 +118,13 @@ def profile_edit():
     if request.method == 'POST' and form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is not None and g.user.username != form.username.data:
-            flash('Username "%s" is used by another user. Please type another' % form.username.data)
+            flash('Username "%s" is used by another user. Please type another' % form.username.data, 'danger')
             return redirect(url_for('profile_edit'))
         g.user.username = form.username.data
         g.user.about_me = form.about_me.data
         db.session.add(g.user)
         db.session.commit()
-        flash('Your changes have been successfully saved')
+        flash('Your changes have been successfully saved', 'success')
         return redirect(url_for('profile_edit'))
     else:
         form.username.data = g.user.username
@@ -151,18 +151,19 @@ def before_request():
 def follow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
-        flash('User %s  not found' % username)
+        flash('User %s  not found' % username, 'danger')
         return redirect(url_for('index'))
     if user == g.user:
-        flash('You can\'t follow yourself')
+        flash('You can\'t follow yourself', 'danger')
         return redirect(url_for('profile', username=username))
     u = g.user.follow(user)
     if u is None:
-        flash('Cannot follow %s.' % username)
+        flash('Cannot follow %s.' % username, 'danger')
         return redirect(url_for('profile', username=username))
     db.session.add(u)
     db.session.commit()
-    flash('You are now following %s!' % username)
+    flash('You are now following %s!' % username, 'success')
+    follower_notification(user, g.user)
     return redirect(url_for('profile', username=username))
 
 
@@ -171,18 +172,18 @@ def follow(username):
 def unfollow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
-        flash('User %s  not found' % username)
+        flash('User %s  not found' % username, 'danger')
         return redirect(url_for('index'))
     if user == g.user:
-        flash('You can\'t unfollow yourself')
+        flash('You can\'t unfollow yourself', 'danger')
         return redirect(url_for('profile', username=username))
     u = g.user.unfollow(user)
     if u is None:
-        flash('Cannot unfollow %s.' % username)
+        flash('Cannot unfollow %s.' % username, 'danger')
         return redirect(url_for('profile', username=username))
     db.session.add(u)
     db.session.commit()
-    flash('You have stopped following %s!' % username)
+    flash('You have stopped following %s!' % username, 'success')
     return redirect(url_for('profile', username=username))
 
 

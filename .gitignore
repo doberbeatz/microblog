@@ -6,6 +6,7 @@
 __pycache__/
 ._*
 .idea/
+.env
 docker-compose.yml
 tmp/*
 flaskenv/

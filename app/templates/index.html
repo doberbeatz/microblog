@@ -1,42 +1,41 @@
 {% extends 'layout/base.html' %}
 
 {% block content %}
-    <h1>Hello, {{user.username}}!</h1>
-    <form action="" method="post">
+    <h1>Hello, {{ user.username }}!</h1>
+    <hr>
+
+    {% for error in form.post.error %}
+        <div class="alert alert-danger" role="alert">[{{ error }}]</div>
+    {% endfor %}
+
+    <form action="" method="post" data-errors="{{ form.errors|tojson|forceescape }}">
         {{ form.hidden_tag() }}
-        <table>
-            <tr>
-                <td>Say something:</td>
-                <td>{{ form.post(size=30, maxlength=140) }}</td>
-                <td>
-                    {% for error in form.post.error %}
-                        <span style="color:red">[{{ error }}]</span><br>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input type="submit" value="Post"></td>
-                <td></td>
-            </tr>
-        </table>
+
+        <div class="form-group">
+            {{ form.post(size=30, rows=3, maxlength=140, class='form-control') }}
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-default">Post</button>
+        </div>
     </form>
 
     {% for post in posts.items %}
         {% include 'post.html' %}
     {% endfor %}
 
-    <p>
-        {% if posts.has_prev %}
-            <a href="{{ url_for('index') }}?PAGE={{ posts.prev_num }}">&lt;&lt;&nbsp;Previous</a>
-        {% else %}
-            &lt;&lt;&nbsp;Previous
-        {% endif %}
-        &nbsp;|&nbsp;
-        {% if posts.has_next %}
-            <a href="{{ url_for('index') }}?PAGE={{ posts.next_num }}">Next&nbsp;&gt;&gt;</a>
-        {% else %}
-            Next&nbsp;&gt;&gt;
-        {% endif %}
-    </p>
+    {% if posts.items|length > config.get('POSTS_PER_PAGE') %}
+        <div class="btn-group" role="group">
+            {% if posts.has_prev %}
+                <a href="{{ url_for('index') }}?PAGE={{ posts.prev_num }}" class="btn btn-default">Previous</a>
+            {% else %}
+                <button type="button" class="btn btn-default" disabled>Previous</button>
+            {% endif %}
+            {% if posts.has_next %}
+                <a href="{{ url_for('index') }}?PAGE={{ posts.next_num }}" class="btn btn-default">Next</a>
+            {% else %}
+                <button type="button" class="btn btn-default" disabled>Next</button>
+            {% endif %}
+        </div>
+    {% endif %}
 {% endblock %}

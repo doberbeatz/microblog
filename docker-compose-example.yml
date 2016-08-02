@@ -2,8 +2,9 @@ web:
     container_name: pynginx
     image: doberbeatz/nginxgunicorn
     ports:
-    - "8080:80"
+    - "80:80"
     volumes:
     - .:/home/www/microblog
     restart: always
-    command: /home/www/microblog/run.cmd
+    env_file: .env
+    command: /home/www/microblog/run.sh

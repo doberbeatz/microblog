@@ -11,4 +11,5 @@ fi
 
 source ./flaskenv/bin/activate                      # Activate Env for this project
 ./flaskenv/bin/pip install -r requirements.txt
+source ./.env
 ./run.py                                            # Run Python Web Server

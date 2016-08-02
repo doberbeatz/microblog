@@ -10,7 +10,6 @@ Flask-Login==0.3.2
 Flask-Mail==0.9.1
 Flask-OpenID==1.2.5
 Flask-SQLAlchemy==2.1
-Flask-WhooshAlchemy==0.56
 Flask-WTF==0.12
 flipflop==1.0
 guess-language==0.2
@@ -27,5 +26,4 @@ sqlalchemy-migrate==0.10.0
 sqlparse==0.2.0
 Tempita==0.5.2
 Werkzeug==0.11.10
-Whoosh==2.7.4
 WTForms==2.1

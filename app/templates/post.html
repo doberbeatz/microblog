@@ -1,6 +1,11 @@
-<table>
-    <tr valign="top">
-        <td><img src="{{ post.author.avatar(50) }}" alt=""></td>
-        <td><i>{{ post.author.username }} says:</i><br>{{ post.body }}</td>
-    </tr>
-</table>
+<div class="media">
+    <div class="media-left">
+        <img class="media-object" src="{{ post.author.avatar(50) }}" alt="">
+    </div>
+    <div class="media-body">
+        <h4 class="media-heading">{{ post.author.username }}</h4>
+        <p style="color: gray">{{ momentjs(post.timestamp).from_now() }}</p>
+        {{ post.body }}
+        <hr>
+    </div>
+</div>
